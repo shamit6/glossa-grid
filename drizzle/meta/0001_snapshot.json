@@ -1,0 +1,130 @@
+{
+  "id": "3fc77336-3d39-4304-9ec4-28f03beeb2d3",
+  "prevId": "2ff23de6-e7b5-410f-9d76-09321a298c98",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "Translations": {
+      "name": "Translations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "original_language": {
+          "name": "original_language",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'en'"
+        },
+        "translated_language": {
+          "name": "translated_language",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'he'"
+        },
+        "original_word": {
+          "name": "original_word",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "translated_word": {
+          "name": "translated_word",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "translated_word_description": {
+          "name": "translated_word_description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "translated_word_example": {
+          "name": "translated_word_example",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "learning_status": {
+          "name": "learning_status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Translations_user_id_Users_id_fk": {
+          "name": "Translations_user_id_Users_id_fk",
+          "tableFrom": "Translations",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
