@@ -21,4 +21,21 @@ export const {
       },
     }),
   ],
+  callbacks:{
+     session:  async ({ session, token, user }) => {
+      if (token) {
+        if (session.user) {
+          session.user.id = token.id as string
+        }
+      }
+      return session
+    },
+    jwt: async ({ token, user, account, profile, isNewUser }) => {
+      if (user) {
+        token.id = user.id
+      }
+
+      return token
+    },
+  }
 });

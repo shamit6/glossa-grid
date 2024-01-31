@@ -12,9 +12,9 @@ export const translations = pgTable('Translations', {
   originalLanguage: varchar('original_language', { length: 32 }).default('en'),
   translatedLanguage: varchar('translated_language', { length: 32 }).default('he'),
   originalWord: varchar('original_word', { length: 64 }),
-  translatedWord: varchar('translated_word', { length: 64 }),
+  translation: varchar('translated_word', { length: 64 }),
   description: text('translated_word_description'),
   example: text('translated_word_example'),
-  learningStatus: text('learning_status').$type<'new' | 'onProgress' | 'learned'>(),
+  learningStatus: text('learning_status').$type<'new' | 'onLearning' | 'learned'>(),
   createdAt: timestamp("created_at").defaultNow(),
 })

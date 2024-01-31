@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { translate } from '@/app/actions/translate'
+import { useState } from 'react'
 
 const formSchema = z.object({
   word: z.string().min(2, {
@@ -22,8 +23,11 @@ const formSchema = z.object({
   }),
 })
 
-function NewTranslateForm() {
-  // 1. Define your form.
+function NewTranslateForm({
+  onTranslationSubmit,
+}: {
+  onTranslationSubmit: () => void
+}) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,11 +35,9 @@ function NewTranslateForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    translate(values.word, 'he').then((res) => {
-      console.log('res for ' + values.word)
-      console.log(res)
-    })
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    void translate(values.word, 'he')
+    // onTranslationSubmit()
   }
 
   return (
@@ -60,15 +62,21 @@ function NewTranslateForm() {
 }
 
 export function NewTranslationButton() {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button>
           <PlusCircledIcon className="mr-2 h-4 w-4" /> Add translation
         </Button>
       </PopoverTrigger>
       <PopoverContent>
-        <NewTranslateForm />
+        <NewTranslateForm
+          onTranslationSubmit={() => {
+            setOpen(false)
+          }}
+        />
       </PopoverContent>
     </Popover>
   )
