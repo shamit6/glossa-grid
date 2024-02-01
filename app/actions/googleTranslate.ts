@@ -1,8 +1,8 @@
 'use server'
 import googleTranslate from 'google-translate-api-browser'
-import { createTranslation } from '../db'
+import { TranslationForm } from '../types'
 
-export async function translate(q: string, target: string) {
+export async function translate(q: string, target: string): Promise<TranslationForm> {
   const response = await googleTranslate(q, { to: 'he', from: 'en', raw: true })
 
   const raw = response.raw as string
@@ -13,11 +13,10 @@ export async function translate(q: string, target: string) {
   const english = JSON.parse(JSON.parse(raw.split('\n')[3])[0][2])[3]
   const [description, example] = english[1][0][0][1][0]
 
-  // return createTranslation({
-  //   userId: 1,
-  //   originalWord: q,
-  //   translation,
-  //   description,
-  //   example,
-  // })
+  return {
+    word: q,
+    translation,
+    description,
+    example,
+  }
 }

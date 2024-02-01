@@ -9,11 +9,8 @@ export default async function Page() {
   const translations = await getTranslations(Number(session?.user?.id!))
 
   return (
-    <div className="flex flex-col justify-center items-center m-3">
-      <div>
-        <NewTranslationButton />
-      </div>
-      <div className="m-3 w-full lg:w-4/5">
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div className="p-3 w-full lg:w-4/5 grow">
         <Tabs defaultValue="new" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="new">New</TabsTrigger>
@@ -28,6 +25,9 @@ export default async function Page() {
           </TabsContent>
           <TabsContent value="learned">Change your password here.</TabsContent>
         </Tabs>
+      </div>
+      <div className="self-end m-3">
+        <NewTranslationButton/>
       </div>
     </div>
   )
