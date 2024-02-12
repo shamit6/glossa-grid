@@ -1,10 +1,11 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import postgres from 'postgres'
 import { genSaltSync, hashSync } from 'bcrypt-ts'
 import { users, translations } from './schema'
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod'
 import { z } from 'zod'
+import type { LearningStatus } from './types'
 
 // Optionally, if not using email/pass login, you can
 // use the Drizzle adapter for Auth.js / NextAuth
@@ -28,24 +29,40 @@ const selectTranslationSchema = createSelectSchema(translations)
 
 export type Translation = z.infer<typeof selectTranslationSchema>
 
-export async function getTranslations(
-  userId: number
-): Promise<Translation[]> {
-  return await db
-    .select()
-    .from(translations)
-    .where(eq(translations.userId, userId))
+export function getTranslations(userId: number): Promise<Translation[]> {
+  return db.select().from(translations).where(eq(translations.userId, userId))
 }
 
-export async function createTranslation({
+export function createTranslation({
   userId,
-  originalWord,
+  word,
   translation,
   description,
   example,
 }: z.infer<typeof insertTranslationSchema>) {
-  return await db
+  return db
     .insert(translations)
-    .values({ userId, originalWord, translation, description, example })
+    .values({ userId, word, translation, description, example })
     .returning()
+}
+
+export function deleteTranslation(translationId: number, userId: number) {
+  return db
+    .delete(translations)
+    .where(
+      and(eq(translations.id, translationId), eq(translations.userId, userId))
+    )
+}
+
+export function changeLearningStatus(
+  translationId: number,
+  userId: number,
+  status: LearningStatus
+) {
+  return db
+    .update(translations)
+    .set({ learningStatus: status })
+    .where(
+      and(eq(translations.id, translationId), eq(translations.userId, userId))
+    )
 }

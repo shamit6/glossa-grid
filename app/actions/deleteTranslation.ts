@@ -2,5 +2,5 @@
 import { deleteTranslation as deleteTranslationDb } from '../db'
 
 export async function deleteTranslation(translationId: number) {
-  return deleteTranslationDb(translationId)
+  return deleteTranslationDb(translationId, 1)
 }

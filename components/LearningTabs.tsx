@@ -1,18 +1,14 @@
 'use client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import type { Translation } from '@/app/db'
 import { TranslationsList } from '@/components/TranslationsList'
 import { useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
 
-export default function LearningTabs({
-  translations,
-}: {
-  translations: Translation[]
-}) {
+export default function LearningTabs() {
   const [currentTab, setCurrentTab] = useState('0')
+
   return (
-    <div className="p-3 w-full h-full lg:w-4/5 inline-block">
+    <div className="p-3 w-full h-full lg:w-4/5 m-auto">
       <Tabs defaultValue="0" value={currentTab} className="w-full h-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger
@@ -49,7 +45,7 @@ export default function LearningTabs({
             index={parseInt(currentTab)}
             containerStyle={{ height: '100%' }}
           >
-            <TranslationsList translations={translations} />
+            <TranslationsList learningStatus='new' />
             <div>on learning</div>
             <div>learned</div>
           </SwipeableViews>

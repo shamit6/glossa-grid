@@ -34,7 +34,7 @@
           "notNull": false,
           "default": "'he'"
         },
-        "original_word": {
+        "word": {
           "name": "original_word",
           "type": "varchar(64)",
           "primaryKey": false,

@@ -11,10 +11,10 @@ export const translations = pgTable('Translations', {
   userId: integer('user_id').references(() => users.id),
   originalLanguage: varchar('original_language', { length: 32 }).default('en'),
   translatedLanguage: varchar('translated_language', { length: 32 }).default('he'),
-  originalWord: varchar('original_word', { length: 64 }),
+  word: varchar('original_word', { length: 64 }),
   translation: varchar('translated_word', { length: 64 }),
   description: text('translated_word_description'),
   example: text('translated_word_example'),
-  learningStatus: text('learning_status').$type<'new' | 'onLearning' | 'learned'>(),
+  learningStatus: text('learning_status').$type<'new' | 'onLearning' | 'learned'>().default('new'),
   createdAt: timestamp("created_at").defaultNow(),
 })

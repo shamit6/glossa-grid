@@ -12,3 +12,5 @@ export const translationFormSchema = z.object({
 })
 
 export type TranslationForm = z.infer<typeof translationFormSchema>
+
+export type LearningStatus = 'new' | 'onLearning' | 'learned'
