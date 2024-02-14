@@ -1,11 +1,34 @@
 'use client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TranslationsList } from '@/components/TranslationsList'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import SwipeableViews from 'react-swipeable-views'
+import { useTranslations } from '@/app/hooks/useTranslations'
 
 export default function LearningTabs() {
   const [currentTab, setCurrentTab] = useState('0')
+  const { deleteTranslation, updateLearningStatus } = useTranslations()
+
+  const startLearningTranslation = useCallback(
+    (translationId: number) => {
+      updateLearningStatus(translationId, 'onLearning')
+    },
+    [updateLearningStatus]
+  )
+
+  const backToNewTranslations = useCallback(
+    (translationId: number) => {
+      updateLearningStatus(translationId, 'new')
+    },
+    [updateLearningStatus]
+  )
+
+  const moveToLearnedTranslations = useCallback(
+    (translationId: number) => {
+      updateLearningStatus(translationId, 'learned')
+    },
+    [updateLearningStatus]
+  )
 
   return (
     <div className="p-3 w-full h-full lg:w-4/5 m-auto">
@@ -38,16 +61,47 @@ export default function LearningTabs() {
         </TabsList>
         <TabsContent value={currentTab} className="h-[calc(100%-4rem)]">
           <SwipeableViews
-            className="h-full"
+            className="h-full overflow-y-hidden"
             onChangeIndex={(index) => {
               setCurrentTab(index.toString())
             }}
             index={parseInt(currentTab)}
             containerStyle={{ height: '100%' }}
           >
-            <TranslationsList learningStatus='new' />
-            <div>on learning</div>
-            <div>learned</div>
+            <TranslationsList
+              learningStatus="new"
+              actions={[
+                {
+                  callback: startLearningTranslation,
+                  label: 'Start learning',
+                },
+                { callback: deleteTranslation, label: 'Delete' },
+              ]}
+            />
+            <TranslationsList
+              learningStatus="onLearning"
+              actions={[
+                {
+                  callback: backToNewTranslations,
+                  label: 'Back to new',
+                },
+                {
+                  callback: moveToLearnedTranslations,
+                  label: 'Move to learned',
+                },
+                { callback: deleteTranslation, label: 'Delete' },
+              ]}
+            />
+            <TranslationsList
+              learningStatus="learned"
+              actions={[
+                {
+                  callback: startLearningTranslation,
+                  label: 'Back to learning',
+                },
+                { callback: deleteTranslation, label: 'Delete' },
+              ]}
+            />
           </SwipeableViews>
         </TabsContent>
       </Tabs>
