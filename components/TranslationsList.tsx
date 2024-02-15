@@ -72,7 +72,7 @@ export function TranslationsList({
                   </CollapsibleContent>
                 </Collapsible>
               )}
-              <div>
+              <>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -96,7 +96,7 @@ export function TranslationsList({
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
-              </div>
+              </>
             </div>
             <Separator />
           </div>

@@ -37,6 +37,7 @@ export default function LearningTabs() {
           <TabsTrigger
             value="0"
             onClick={() => {
+              window.history.replaceState({}, '', '/?tab=new')
               setCurrentTab('0')
             }}
           >
@@ -45,6 +46,7 @@ export default function LearningTabs() {
           <TabsTrigger
             value="1"
             onClick={() => {
+              window.history.replaceState({}, '', '/?tab=onLearning')
               setCurrentTab('1')
             }}
           >
@@ -53,6 +55,7 @@ export default function LearningTabs() {
           <TabsTrigger
             value="2"
             onClick={() => {
+              window.history.replaceState({}, '', '/?tab=learned')
               setCurrentTab('2')
             }}
           >
