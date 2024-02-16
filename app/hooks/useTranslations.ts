@@ -3,8 +3,9 @@ import { Translation } from '@/app/db'
 import { useToast } from '@/components/ui/use-toast'
 import { useCallback } from 'react'
 import { changeLearningStatus } from '@/app/actions/changeLearningStatus'
-import type { LearningStatus } from '../types'
+import type { LearningStatus, TranslationForm } from '../types'
 import { deleteTranslation as deleteTranslationAction } from '@/app/actions/deleteTranslation'
+import { createTranslation as createTranslationAction } from '@/app/actions/createTranslation'
 
 export function useTranslations() {
   const { data: translations = [], mutate } =
@@ -83,9 +84,44 @@ export function useTranslations() {
     [mutate, toast, translations]
   )
 
+  const createTranslation = useCallback(
+    async (translation: TranslationForm) => {
+      mutate(
+        async (currentTranslations = translations) => {
+          try {
+            const dbTransaction = await createTranslationAction(translation)
+            toast({
+              title: 'Translation created',
+              className: 'relative bg-green-500 mt-3 text-primary-foreground',
+              duration: 3000,
+            })
+
+            return [...dbTransaction, ...currentTranslations]
+          } catch (error) {
+            toast({
+              title: 'Failed to create translation',
+              description: 'Error in creating translation',
+              className: 'relative bg-red-500 mt-3 text-primary-foreground',
+              duration: 3000,
+            })
+            throw error
+          }
+        },
+        {
+          optimisticData: (currentTranslations = translations) => {
+            return [translation as Translation, ...currentTranslations]
+          },
+          rollbackOnError: true,
+        }
+      )
+    },
+    [mutate, toast, translations]
+  )
+
   return {
     translations,
     deleteTranslation,
     updateLearningStatus,
+    createTranslation,
   }
 }

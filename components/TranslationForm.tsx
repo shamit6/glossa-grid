@@ -16,9 +16,9 @@ import { Input } from '@/components/ui/input'
 import { translate } from '@/app/actions/googleTranslate'
 import { Textarea } from './ui/textarea'
 import { TranslationForm, translationFormSchema } from '@/app/types'
-import { createTranslation } from '@/app/actions/createTranslation'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { cn } from '@/lib/utils'
+import { useTranslations } from '@/app/hooks/useTranslations'
 
 export function NewTranslateForm({
   onTranslationSubmit,
@@ -30,12 +30,12 @@ export function NewTranslateForm({
     defaultValues: {
       word: '',
       toLanguage: 'he',
-      fromLanguage: 'en',
+      fromLanguage: 'en'
     },
   })
 
   const { fromLanguage, toLanguage } = form.watch()
-
+  const { createTranslation } = useTranslations()
   async function onSubmit(values: TranslationForm) {
     void createTranslation(values)
     onTranslationSubmit()
