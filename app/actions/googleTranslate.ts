@@ -1,9 +1,10 @@
 'use server'
 import googleTranslate from 'google-translate-api-browser'
 import { TranslationForm } from '../types'
+import { LangKey } from 'google-translate-api-browser/dist/types/LangKey'
 
-export async function translate(q: string, target: string): Promise<TranslationForm> {
-  const response = await googleTranslate(q, { to: 'he', from: 'en', raw: true })
+export async function translate(q: string, from: string, to: string): Promise<TranslationForm> {
+  const response = await googleTranslate(q, { to: to as LangKey, from: from as LangKey, raw: true })
 
   const raw = response.raw as string
   

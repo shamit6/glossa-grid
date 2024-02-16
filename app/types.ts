@@ -9,6 +9,12 @@ export const translationFormSchema = z.object({
   }),
   description: z.string().optional(),
   example: z.string().optional(),
+  originalLanguage: z.string().min(2, {
+    message: 'Language must be at least 2 characters.',
+  }),
+  translatedLanguage: z.string().min(2, {
+    message: 'Language must be at least 2 characters.',
+  }),
 })
 
 export type TranslationForm = z.infer<typeof translationFormSchema>

@@ -4,6 +4,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { useCallback } from 'react'
 import { changeLearningStatus } from '@/app/actions/changeLearningStatus'
 import type { LearningStatus } from '../types'
+import { deleteTranslation as deleteTranslationAction } from '@/app/actions/deleteTranslation'
 
 export function useTranslations() {
   const { data: translations = [], mutate } =
@@ -13,9 +14,9 @@ export function useTranslations() {
   const deleteTranslation = useCallback(
     async (id: number) => {
       mutate(
-        async (currentTranslations = []) => {
+        async (currentTranslations = translations) => {
           try {
-            await deleteTranslation(id)
+            await deleteTranslationAction(id)
             toast({
               title: 'Translation deleted',
               className: 'relative bg-green-500 mt-3 text-primary-foreground',

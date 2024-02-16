@@ -17,6 +17,8 @@ import { translate } from '@/app/actions/googleTranslate'
 import { Textarea } from './ui/textarea'
 import { TranslationForm, translationFormSchema } from '@/app/types'
 import { createTranslation } from '@/app/actions/createTranslation'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { cn } from '@/lib/utils'
 
 export function NewTranslateForm({
   onTranslationSubmit,
@@ -27,8 +29,12 @@ export function NewTranslateForm({
     resolver: zodResolver(translationFormSchema),
     defaultValues: {
       word: '',
+      translatedLanguage: 'he',
+      originalLanguage: 'en',
     },
   })
+
+  const { originalLanguage, translatedLanguage } = form.watch()
 
   async function onSubmit(values: TranslationForm) {
     void createTranslation(values)
@@ -38,7 +44,8 @@ export function NewTranslateForm({
   async function fillWithGoogleTranslation() {
     const { translation, description, example } = await translate(
       form.getValues('word'),
-      'he'
+      form.getValues('originalLanguage'),
+      form.getValues('translatedLanguage')
     )
     form.setValue('translation', translation)
     form.setValue('description', description)
@@ -48,6 +55,50 @@ export function NewTranslateForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <Popover>
+          <PopoverTrigger asChild>
+            <div
+              className={cn(
+                'text-sm text-muted-foreground cursor-pointer',
+                (!originalLanguage || !translatedLanguage) && 'text-destructive'
+              )}
+            >{`${originalLanguage} -> ${translatedLanguage}`}</div>
+          </PopoverTrigger>
+          <PopoverContent side="bottom">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <FormField
+                  control={form.control}
+                  name="originalLanguage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid grid-cols-2 items-center gap-4">
+                        <FormLabel>Original language</FormLabel>
+                        <FormControl>
+                          <Input {...field} autoComplete="off" />
+                        </FormControl>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="translatedLanguage"
+                  render={({ field }) => (
+                    <FormItem>
+                      <div className="grid grid-cols-2 items-center gap-4">
+                        <FormLabel>Target Language</FormLabel>
+                        <FormControl>
+                          <Input {...field} autoComplete="off" />
+                        </FormControl>
+                      </div>
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
         <FormField
           control={form.control}
           name="word"
@@ -59,11 +110,12 @@ export function NewTranslateForm({
                   <Input placeholder="hello" {...field} autoComplete="off" />
                   <Button
                     variant="secondary"
-                    className="text-sm text-pretty ml-2"
+                    className="text-xs text-pretty ml-2"
                     onClick={(e) => {
                       e.preventDefault()
                       fillWithGoogleTranslation()
                     }}
+                    disabled={!originalLanguage || !translatedLanguage}
                   >
                     Fill With Google Translation
                   </Button>
@@ -102,7 +154,6 @@ export function NewTranslateForm({
                   placeholder="greeting"
                   {...field}
                   autoComplete="off"
-                  dir="rtl"
                 />
               </FormControl>
               <FormMessage />
@@ -120,7 +171,6 @@ export function NewTranslateForm({
                   placeholder="hello world"
                   {...field}
                   autoComplete="off"
-                  dir="rtl"
                 />
               </FormControl>
               <FormMessage />
