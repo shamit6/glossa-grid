@@ -29,12 +29,12 @@ export function NewTranslateForm({
     resolver: zodResolver(translationFormSchema),
     defaultValues: {
       word: '',
-      translatedLanguage: 'he',
-      originalLanguage: 'en',
+      toLanguage: 'he',
+      fromLanguage: 'en',
     },
   })
 
-  const { originalLanguage, translatedLanguage } = form.watch()
+  const { fromLanguage, toLanguage } = form.watch()
 
   async function onSubmit(values: TranslationForm) {
     void createTranslation(values)
@@ -44,8 +44,8 @@ export function NewTranslateForm({
   async function fillWithGoogleTranslation() {
     const { translation, description, example } = await translate(
       form.getValues('word'),
-      form.getValues('originalLanguage'),
-      form.getValues('translatedLanguage')
+      form.getValues('fromLanguage'),
+      form.getValues('toLanguage')
     )
     form.setValue('translation', translation)
     form.setValue('description', description)
@@ -60,16 +60,16 @@ export function NewTranslateForm({
             <div
               className={cn(
                 'text-sm text-muted-foreground cursor-pointer',
-                (!originalLanguage || !translatedLanguage) && 'text-destructive'
+                (!fromLanguage || !toLanguage) && 'text-destructive'
               )}
-            >{`${originalLanguage} -> ${translatedLanguage}`}</div>
+            >{`${fromLanguage} -> ${toLanguage}`}</div>
           </PopoverTrigger>
           <PopoverContent side="bottom">
             <div className="grid gap-4">
               <div className="space-y-2">
                 <FormField
                   control={form.control}
-                  name="originalLanguage"
+                  name="fromLanguage"
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid grid-cols-2 items-center gap-4">
@@ -83,7 +83,7 @@ export function NewTranslateForm({
                 />
                 <FormField
                   control={form.control}
-                  name="translatedLanguage"
+                  name="toLanguage"
                   render={({ field }) => (
                     <FormItem>
                       <div className="grid grid-cols-2 items-center gap-4">
@@ -115,7 +115,7 @@ export function NewTranslateForm({
                       e.preventDefault()
                       fillWithGoogleTranslation()
                     }}
-                    disabled={!originalLanguage || !translatedLanguage}
+                    disabled={!fromLanguage || !toLanguage}
                   >
                     Fill With Google Translation
                   </Button>

@@ -18,5 +18,7 @@ export async function translate(q: string, from: string, to: string): Promise<Tr
     translation,
     description,
     example,
+    fromLanguage: from,
+    toLanguage: to,
   }
 }

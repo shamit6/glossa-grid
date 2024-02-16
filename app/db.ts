@@ -39,8 +39,8 @@ export function createTranslation({
   translation,
   description,
   example,
-  originalLanguage,
-  translatedLanguage,
+  fromLanguage,
+  toLanguage,
 }: z.infer<typeof insertTranslationSchema>) {
   return db
     .insert(translations)
@@ -50,8 +50,8 @@ export function createTranslation({
       translation,
       description,
       example,
-      originalLanguage,
-      translatedLanguage,
+      fromLanguage,
+      toLanguage,
     })
     .returning()
 }

@@ -9,9 +9,9 @@ export const users = pgTable('Users', {
 export const translations = pgTable('Translations', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id),
-  originalLanguage: varchar('original_language', { length: 32 }).default('en'),
-  translatedLanguage: varchar('translated_language', { length: 32 }).default('he'),
-  word: varchar('original_word', { length: 64 }),
+  fromLanguage: varchar('from_language', { length: 32 }).default('en'),
+  toLanguage: varchar('to_language', { length: 32 }).default('he'),
+  word: varchar('word', { length: 64 }),
   translation: varchar('translated_word', { length: 64 }),
   description: text('translated_word_description'),
   example: text('translated_word_example'),
